@@ -1,0 +1,14 @@
+[
+  { "id": "amira-signalers", "name": "Amira", "crewId": "signalers" },
+  { "id": "nadim-signalers", "name": "Nadim", "crewId": "signalers" },
+  { "id": "sara-signalers", "name": "Sara", "crewId": "signalers" },
+  { "id": "youssef-lanterns", "name": "Youssef", "crewId": "lanterns" },
+  { "id": "mira-lanterns", "name": "Mira", "crewId": "lanterns" },
+  { "id": "tarek-lanterns", "name": "Tarek", "crewId": "lanterns" },
+  { "id": "elias-gatekeepers", "name": "Elias", "crewId": "gatekeepers" },
+  { "id": "celine-gatekeepers", "name": "Celine", "crewId": "gatekeepers" },
+  { "id": "rami-gatekeepers", "name": "Rami", "crewId": "gatekeepers" },
+  { "id": "jana-trackers", "name": "Jana", "crewId": "trackers" },
+  { "id": "karim-trackers", "name": "Karim", "crewId": "trackers" },
+  { "id": "lina-trackers", "name": "Lina", "crewId": "trackers" }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "signalers",
+    "name": "Signalers",
+    "code": "SIGNAL",
+    "motto": "When the signal breaks, we reconnect.",
+    "description": "Specialists in communication, radio clues, and decoding messages.",
+    "lightTokens": 8,
+    "shadowMarks": 1,
+    "recoveryBonus": 10,
+    "latestTransmission": "Keep the static low and the channels clear.",
+    "leaderNote": "",
+    "activeMissionIds": [
+      "the-first-transmission",
+      "the-christmas-lights-code",
+      "build-the-safe-zone"
+    ],
+    "completedMissionIds": []
+  },
+  {
+    "id": "lanterns",
+    "name": "Lanterns",
+    "code": "LIGHT",
+    "motto": "We carry light into the unknown.",
+    "description": "Specialists in courage, spirit, and night missions.",
+    "lightTokens": 7,
+    "shadowMarks": 0,
+    "recoveryBonus": 5,
+    "latestTransmission": "Light discipline active. Night watch secured.",
+    "leaderNote": "",
+    "activeMissionIds": [
+      "the-first-transmission",
+      "the-christmas-lights-code",
+      "build-the-safe-zone"
+    ],
+    "completedMissionIds": []
+  },
+  {
+    "id": "gatekeepers",
+    "name": "Gatekeepers",
+    "code": "GATE",
+    "motto": "Hold the line. Close the Gate.",
+    "description": "Specialists in discipline, protection, and strategic control.",
+    "lightTokens": 5,
+    "shadowMarks": 2,
+    "recoveryBonus": 15,
+    "latestTransmission": "Barrier perimeter mapped and reinforced.",
+    "leaderNote": "",
+    "activeMissionIds": [
+      "the-first-transmission",
+      "the-christmas-lights-code",
+      "build-the-safe-zone"
+    ],
+    "completedMissionIds": []
+  },
+  {
+    "id": "trackers",
+    "name": "Trackers",
+    "code": "TRACK",
+    "motto": "No clue is too small.",
+    "description": "Specialists in observation, tracking, and investigation.",
+    "lightTokens": 6,
+    "shadowMarks": 1,
+    "recoveryBonus": 8,
+    "latestTransmission": "Footprints found east of the Safe Zone.",
+    "leaderNote": "",
+    "activeMissionIds": [
+      "the-first-transmission",
+      "the-christmas-lights-code",
+      "build-the-safe-zone"
+    ],
+    "completedMissionIds": []
+  }
+]

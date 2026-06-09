@@ -1,0 +1,238 @@
+[
+  {
+    "id": "the-first-transmission",
+    "sequence": 1,
+    "title": "The First Transmission",
+    "day": "Day 1: The Signal Begins",
+    "storyIntro": "The first signal arrives at dusk, buried under static and panic.",
+    "objective": "Decode the origin point of the emergency message and report the town name.",
+    "rules": [
+      "Work as a full crew before giving your final answer.",
+      "Use only mission-provided notes and clues."
+    ],
+    "materials": [
+      "Notebook",
+      "Camp map",
+      "Mission radio sheet"
+    ],
+    "clueText": "Every distorted coordinate points back to one place: the town where the Gate first shimmered open.",
+    "answer": "HAVENWOOD",
+    "hasAnswer": true,
+    "password": "",
+    "points": 20
+  },
+  {
+    "id": "the-christmas-lights-code",
+    "sequence": 2,
+    "title": "The Christmas Lights Code",
+    "day": "Day 1: The Signal Begins",
+    "storyIntro": "Flickering lights in a cabin window begin spelling out a warning.",
+    "objective": "Translate the blinking sequence into the hidden instruction.",
+    "rules": [
+      "Only one answer may be submitted per full crew discussion.",
+      "Keep the coded sequence intact before decoding."
+    ],
+    "materials": [
+      "String lights diagram",
+      "Alphabet cipher"
+    ],
+    "clueText": "The pattern repeats near the words that lead crews away from danger.",
+    "answer": "FOLLOW THE LIGHTS",
+    "hasAnswer": true,
+    "password": "",
+    "points": 30
+  },
+  {
+    "id": "build-the-safe-zone",
+    "sequence": 3,
+    "title": "Build the Safe Zone",
+    "day": "Day 1: The Signal Begins",
+    "storyIntro": "Before the breach widens, the camp must establish a secure command zone.",
+    "objective": "Construct and organize a Safe Zone that can support all later missions.",
+    "rules": [
+      "Every crew member must contribute to setup.",
+      "Leaders verify readiness on site."
+    ],
+    "materials": [
+      "Rope",
+      "Lanterns",
+      "Camp marker flags"
+    ],
+    "clueText": "A stable base is built with teamwork, not speed.",
+    "answer": "",
+    "hasAnswer": false,
+    "password": "",
+    "points": 40
+  },
+  {
+    "id": "antenna-tower",
+    "sequence": 4,
+    "title": "Antenna Tower",
+    "day": "Day 2: Into the Other Side",
+    "storyIntro": "The camp antenna has gone dead. Without it, no one can hear what is coming.",
+    "objective": "Restore the tower alignment and relay the recovery signal.",
+    "rules": [
+      "Complete each station in order.",
+      "No unsafe climbing or rushing."
+    ],
+    "materials": [
+      "Compass",
+      "Flagging tape",
+      "Signal cards"
+    ],
+    "clueText": "Signal strength returns when the crew moves as one.",
+    "answer": "",
+    "hasAnswer": false,
+    "password": "",
+    "points": 40
+  },
+  {
+    "id": "the-lab-beneath-havenwood",
+    "sequence": 5,
+    "title": "The Lab Beneath Havenwood",
+    "day": "Day 2: Into the Other Side",
+    "storyIntro": "Below the town lies a sealed lab where the first experiments began.",
+    "objective": "Unlock the final file phrase hidden inside the lab notes.",
+    "rules": [
+      "Search every clue before attempting the phrase.",
+      "The answer must be submitted exactly."
+    ],
+    "materials": [
+      "File fragments",
+      "UV clue card",
+      "Evidence tags"
+    ],
+    "clueText": "The strongest teams know the lab survived on one thing: loyalty and trust.",
+    "answer": "LOYALTY TRUST",
+    "hasAnswer": true,
+    "password": "",
+    "points": 60
+  },
+  {
+    "id": "close-the-mini-gates",
+    "sequence": 6,
+    "title": "Close the Mini-Gates",
+    "day": "Day 2: Into the Other Side",
+    "storyIntro": "Small fractures are opening around camp and feeding the main breach.",
+    "objective": "Use the collected runes to identify the word that stabilizes the fractures.",
+    "rules": [
+      "All rune pieces must be accounted for.",
+      "Do not force an answer before checking the full phrase."
+    ],
+    "materials": [
+      "Rune tiles",
+      "Mission envelope"
+    ],
+    "clueText": "The control room logs mark only one final state as acceptable.",
+    "answer": "STABLE",
+    "hasAnswer": true,
+    "password": "",
+    "points": 50
+  },
+  {
+    "id": "silent-morning-protocol",
+    "sequence": 7,
+    "title": "Silent Morning Protocol",
+    "day": "Day 3: The Mind Flayer Day",
+    "storyIntro": "The Mind Flayer is listening. The morning must begin in total control.",
+    "objective": "Navigate the full protocol without breaking silence or formation.",
+    "rules": [
+      "No speaking during the mission window.",
+      "Leaders confirm completion."
+    ],
+    "materials": [
+      "Protocol card",
+      "Formation markers"
+    ],
+    "clueText": "Control starts long before the first words are spoken.",
+    "answer": "",
+    "hasAnswer": false,
+    "password": "",
+    "points": 30
+  },
+  {
+    "id": "the-possession-game",
+    "sequence": 8,
+    "title": "The Possession Game",
+    "day": "Day 3: The Mind Flayer Day",
+    "storyIntro": "The Other Side feeds on weak reactions. Crews must identify what to shut down.",
+    "objective": "Assemble the three-word defense phrase from the scenario deck.",
+    "rules": [
+      "Discuss every scenario before choosing the phrase.",
+      "Submit only after the full phrase is assembled."
+    ],
+    "materials": [
+      "Scenario deck",
+      "Defense phrase board"
+    ],
+    "clueText": "Three threats make the breach stronger: ego, noise, and fear.",
+    "answer": "EGO SILENCE FEAR",
+    "hasAnswer": true,
+    "password": "",
+    "points": 40
+  },
+  {
+    "id": "who-opened-the-gate",
+    "sequence": 9,
+    "title": "Who Opened the Gate?",
+    "day": "Day 3: The Mind Flayer Day",
+    "storyIntro": "The final witness file reveals an uncomfortable truth about the breach.",
+    "objective": "Answer the accusation hidden across all prior clues.",
+    "rules": [
+      "Review the entire evidence chain before answering.",
+      "The answer is collective, not individual."
+    ],
+    "materials": [
+      "Evidence wall",
+      "Thread map",
+      "Witness notes"
+    ],
+    "clueText": "The file insists the Gate responds to choices made by the whole team.",
+    "answer": "THE CREW",
+    "hasAnswer": true,
+    "password": "",
+    "points": 60
+  },
+  {
+    "id": "final-gate-ceremony",
+    "sequence": 10,
+    "title": "Final Gate Ceremony",
+    "day": "Day 4: Close the Gate",
+    "storyIntro": "The camp gathers at the breach for the closing ritual.",
+    "objective": "Speak the final declaration that seals the Gate.",
+    "rules": [
+      "The declaration must be spoken together.",
+      "Leaders trigger the final check only once."
+    ],
+    "materials": [
+      "Ceremony script",
+      "Lantern circle"
+    ],
+    "clueText": "Only one collective choice breaks the hold of the Other Side.",
+    "answer": "WE CHOOSE THE LIGHT",
+    "hasAnswer": true,
+    "password": "",
+    "points": 80
+  },
+  {
+    "id": "the-return-plan",
+    "sequence": 11,
+    "title": "The Return Plan",
+    "day": "Day 4: Close the Gate",
+    "storyIntro": "The breach is closing, but camp still needs a safe route home.",
+    "objective": "Finalize the crew debrief and return strategy.",
+    "rules": [
+      "Every member contributes one reflection.",
+      "Leaders confirm completion."
+    ],
+    "materials": [
+      "Debrief sheet",
+      "Route map"
+    ],
+    "clueText": "The final step is returning stronger than you arrived.",
+    "answer": "",
+    "hasAnswer": false,
+    "password": "",
+    "points": 30
+  }
+]
