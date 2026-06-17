@@ -220,6 +220,24 @@ export function createApp() {
   app.use(cors());
   app.use(express.json({ limit: "12mb" }));
 
+  app.get("/", (_req, res) => {
+    res.json({
+      service: "The Last Outpost API",
+      status: "online",
+      docs: {
+        publicSettings: "/api/settings/public",
+        campMap: "/api/camp-map"
+      }
+    });
+  });
+
+  app.get("/api/health", (_req, res) => {
+    res.json({
+      status: "ok",
+      timestamp: new Date().toISOString()
+    });
+  });
+
   app.get("/api/settings/public", async (_req, res, next) => {
     try {
       const settings = await getSettings();
