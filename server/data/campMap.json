@@ -1,0 +1,11 @@
+{
+  "id": "last-outpost-blueprint",
+  "title": "The Last Outpost Blueprint",
+  "imageUrl": "/blueprints/last-outpost-blueprint.jpeg",
+  "widthMeters": 36,
+  "leftDepthMeters": 20,
+  "rightDepthMeters": 24,
+  "scaleDescription": "1 grid square is approximately 1 meter",
+  "updatedAt": "",
+  "updatedBy": "system"
+}

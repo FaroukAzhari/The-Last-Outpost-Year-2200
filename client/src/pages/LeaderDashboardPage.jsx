@@ -31,6 +31,10 @@ export function LeaderDashboardPage() {
         <Link className="quick-link" to="/leader/rovers">Assign Factions</Link>
         <Link className="quick-link" to="/leader/rovers">Assign Roles</Link>
         <Link className="quick-link" to="/leader/evaluations">Evaluation Board</Link>
+        <Link className="quick-link" to="/leader/individual-evaluations">Individual Evaluations</Link>
+        <Link className="quick-link" to="/leader/blueprint">Outpost Blueprint</Link>
+        <Link className="quick-link" to="/evaluation-history">Evaluation History</Link>
+        <Link className="quick-link" to="/individual-evaluation-history">Rover Evaluation History</Link>
         <Link className="quick-link" to="/rules">Survival Laws</Link>
         <Link className="quick-link" to="/briefing">Backstory</Link>
       </div>

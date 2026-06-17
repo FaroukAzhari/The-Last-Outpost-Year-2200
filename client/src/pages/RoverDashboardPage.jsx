@@ -37,6 +37,9 @@ export function RoverDashboardPage() {
         <Link className="quick-link" to="/briefing">A.R.K. Briefing</Link>
         <Link className="quick-link" to="/evaluation-system">Human Override Index</Link>
         <Link className="quick-link" to="/scoreboard">Faction Board</Link>
+        <Link className="quick-link" to="/evaluation-history">Evaluation History</Link>
+        <Link className="quick-link" to="/individual-evaluation-history">Rover Evaluation History</Link>
+        <Link className="quick-link" to="/outpost-blueprint">Outpost Blueprint</Link>
         <Link className="quick-link" to="/missions">Daily Missions</Link>
       </div>
     </section>

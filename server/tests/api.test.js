@@ -16,6 +16,9 @@ async function resetDatabase() {
     collections.roles.deleteMany({}),
     collections.missions.deleteMany({}),
     collections.evaluations.deleteMany({}),
+    collections.individualEvaluations.deleteMany({}),
+    collections.campMaps.deleteMany({}),
+    collections.mapLocations.deleteMany({}),
     collections.settings.deleteMany({})
   ]);
 
@@ -24,6 +27,8 @@ async function resetDatabase() {
   await collections.factions.insertMany(seed.factions);
   await collections.roles.insertMany(seed.roles);
   await collections.missions.insertMany(seed.missions);
+  await collections.campMaps.insertOne(seed.campMap);
+  await collections.mapLocations.insertMany(seed.mapLocations);
   await collections.settings.insertOne({ id: "app-settings", ...seed.settings });
 }
 
@@ -201,4 +206,78 @@ test("evaluation scores are saved and totaled out of 100", async () => {
 
   const summary = await request(app).get("/api/evaluations");
   assert.equal(summary.body.cumulative.find((entry) => entry.faction.id === "foragers").total, 90);
+});
+
+test("individual rover evaluations are saved and visible read-only", async () => {
+  const collections = getCollections();
+  await collections.users.insertOne({
+    id: "rover-individual",
+    fullName: "Individual Rover",
+    fullNameKey: "individual rover",
+    nickname: "",
+    nicknameKey: "",
+    password: "1234",
+    displayName: "Individual Rover",
+    role: "rover",
+    status: "assigned",
+    factionId: "foragers",
+    assignedRole: "scout-radio-operator"
+  });
+
+  const app = createApp();
+  const response = await request(app)
+    .post("/api/individual-evaluations")
+    .send({
+      day: "Day 2",
+      roverId: "rover-individual",
+      readiness: 16,
+      discipline: 17,
+      resourcefulness: 18,
+      teamwork: 19,
+      humanity: 20,
+      notes: "Strong recovery under pressure.",
+      growthMission: "Support the next formation."
+    });
+
+  assert.equal(response.status, 200);
+  assert.equal(response.body.evaluation.total, 90);
+
+  const summary = await request(app).get("/api/individual-evaluations");
+  const saved = summary.body.rows.find((row) => row.roverId === "rover-individual");
+  assert.equal(saved.total, 90);
+  assert.equal(saved.rover.faction.name, "The Foragers");
+  assert.equal(saved.rover.roleInfo.name, "Scout / Radio Operator");
+});
+
+test("camp map returns visible rover-safe markers", async () => {
+  const app = createApp();
+  const response = await request(app).get("/api/camp-map");
+
+  assert.equal(response.status, 200);
+  assert.equal(response.body.map.title, "The Last Outpost Blueprint");
+  assert.ok(response.body.locations.some((location) => location.id === "meeting-room"));
+  assert.ok(response.body.locations.every((location) => location.isVisible));
+  assert.ok(response.body.locations.every((location) => !location.leaderOnly));
+});
+
+test("leaders can update map marker coordinates", async () => {
+  const app = createApp();
+  const response = await request(app)
+    .put("/api/camp-map/locations/fire-pit")
+    .send({
+      name: "Fire Pit",
+      description: "Updated fire circle.",
+      category: "Gathering Zone",
+      xPosition: 52.5,
+      yPosition: 49.5,
+      accessLevel: "All participants during scheduled sessions",
+      safetyNote: "Leader supervision required.",
+      isVisible: true,
+      leaderOnly: false
+    });
+
+  assert.equal(response.status, 200);
+  assert.equal(response.body.location.xPosition, 52.5);
+  assert.equal(response.body.location.yPosition, 49.5);
+  assert.equal(response.body.location.safetyNote, "Leader supervision required.");
 });

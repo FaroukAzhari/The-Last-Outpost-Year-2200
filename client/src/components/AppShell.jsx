@@ -36,7 +36,9 @@ export function AppShell({ children, settings }) {
             </Link>
           ))}
           {session?.role === "rover" ? <Link className="nav-link" to="/rover">Rover Board</Link> : null}
+          {session?.role === "rover" ? <Link className="nav-link" to="/outpost-blueprint">Outpost Blueprint</Link> : null}
           {session?.role === "leader" ? <Link className="nav-link" to="/leader">Leader Board</Link> : null}
+          {session?.role === "leader" ? <Link className="nav-link" to="/leader/blueprint">Blueprint Command</Link> : null}
           {session ? (
             <button className="nav-link nav-button" onClick={handleLogout} type="button">Logout</button>
           ) : null}

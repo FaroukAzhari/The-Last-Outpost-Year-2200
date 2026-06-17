@@ -184,7 +184,11 @@ select {
 .content-grid,
 .scoreboard-grid,
 .stats-grid,
-.form-grid {
+.form-grid,
+.history-grid,
+.filter-bar,
+.blueprint-layout,
+.legend-grid {
   display: grid;
   gap: 1rem;
 }
@@ -192,6 +196,8 @@ select {
 .info-card,
 .form-card,
 .score-card,
+.history-card,
+.blueprint-card,
 .notice,
 .mission-group {
   border: 1px solid var(--border);
@@ -225,7 +231,8 @@ select {
 .rule-item,
 .rover-row,
 .assignment-row,
-.day-score {
+.day-score,
+.history-block {
   display: grid;
   gap: 0.45rem;
   border: 1px solid var(--border);
@@ -311,6 +318,148 @@ select {
   color: var(--orange);
 }
 
+.stack-form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.blueprint-card {
+  margin-top: 1rem;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.blueprint-stage {
+  position: relative;
+  min-width: 760px;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0d100c;
+}
+
+.blueprint-stage img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  background: #11140f;
+}
+
+.blueprint-empty {
+  min-height: 360px;
+  display: grid;
+  place-content: center;
+  gap: 0.5rem;
+  text-align: center;
+  color: var(--muted);
+}
+
+.map-side-panel {
+  align-self: start;
+}
+
+.map-marker {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 2px solid var(--sand);
+  border-radius: 50%;
+  background: rgba(16, 18, 15, 0.72);
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 3px rgba(16, 18, 15, 0.45);
+  cursor: pointer;
+}
+
+.map-marker:hover,
+.map-marker:focus {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.marker-safe-zone {
+  border-color: #8aae68;
+}
+
+.marker-command-zone {
+  border-color: var(--sand);
+}
+
+.marker-activity-zone {
+  border-color: var(--orange);
+}
+
+.marker-research-zone {
+  border-color: #7fa9a2;
+}
+
+.marker-service-zone {
+  border-color: #b7a26d;
+}
+
+.marker-emergency-zone {
+  border-color: var(--red);
+}
+
+.marker-restricted-access,
+.marker-restricted-boundary {
+  border-color: #d34f44;
+  border-radius: 4px;
+}
+
+.marker-access-point {
+  border-color: #d9d2bd;
+}
+
+.marker-gathering-zone {
+  border-color: #d88d58;
+}
+
+.legend-grid {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  margin-top: 1rem;
+}
+
+.legend-grid span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.legend-grid .map-marker {
+  position: static;
+  flex: 0 0 auto;
+  transform: none;
+  cursor: default;
+}
+
+.history-card {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.history-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.history-card__header span,
+.history-card small {
+  color: var(--muted);
+}
+
+.history-card__header strong {
+  color: var(--sand);
+  font-size: 1.5rem;
+}
+
 .error-text,
 .error-panel,
 .warning-text {
@@ -333,8 +482,15 @@ select {
 
   .content-grid,
   .scoreboard-grid,
-  .form-grid {
+  .form-grid,
+  .history-grid,
+  .filter-bar {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .blueprint-layout {
+    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+    align-items: start;
   }
 
   .stats-grid {

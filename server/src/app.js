@@ -5,6 +5,19 @@ import { getCollections } from "./lib/db.js";
 
 const DAYS = ["Day 1", "Day 2", "Day 3", "Day 4"];
 const EVALUATION_FIELDS = ["survivalSkill", "security", "resources", "morale", "humanity"];
+const INDIVIDUAL_FIELDS = ["readiness", "discipline", "resourcefulness", "teamwork", "humanity"];
+const MAP_CATEGORIES = [
+  "Safe Zone",
+  "Command Zone",
+  "Activity Zone",
+  "Research Zone",
+  "Service Zone",
+  "Emergency Zone",
+  "Restricted Access",
+  "Restricted Boundary",
+  "Access Point",
+  "Gathering Zone"
+];
 const BREACH_REASONS = [
   "Lateness",
   "Unsafe behavior",
@@ -51,6 +64,19 @@ function getEvaluationTotal(evaluation) {
 
 function validateScore(value) {
   return Number.isFinite(value) && value >= 0 && value <= 20;
+}
+
+function getIndividualTotal(evaluation) {
+  return INDIVIDUAL_FIELDS.reduce((sum, field) => sum + Number(evaluation[field] || 0), 0);
+}
+
+function clampPercent(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) {
+    return 50;
+  }
+
+  return Math.max(0, Math.min(100, number));
 }
 
 async function getSettings() {
@@ -106,11 +132,93 @@ async function getEvaluationSummary() {
   return { rows, cumulative };
 }
 
+async function getIndividualEvaluationSummary() {
+  const collections = getCollections();
+  const [evaluations, rovers, factions, roles] = await Promise.all([
+    collections.individualEvaluations.find({}).sort({ day: 1, roverId: 1 }).toArray(),
+    collections.users.find({ role: "rover" }).sort({ fullName: 1 }).toArray(),
+    collections.factions.find({}).toArray(),
+    collections.roles.find({}).toArray()
+  ]);
+  const roversById = new Map(rovers.map((rover) => [rover.id, sanitizeMongoDocument(rover)]));
+  const factionsById = new Map(factions.map((faction) => [faction.id, sanitizeMongoDocument(faction)]));
+  const rolesById = new Map(roles.map((role) => [role.id, sanitizeMongoDocument(role)]));
+
+  const rows = evaluations.map(sanitizeMongoDocument).map((evaluation) => {
+    const rover = roversById.get(evaluation.roverId);
+
+    return {
+      ...evaluation,
+      total: getIndividualTotal(evaluation),
+      rover: rover
+        ? {
+          ...rover,
+          faction: factionsById.get(rover.factionId) ?? null,
+          roleInfo: rolesById.get(rover.assignedRole) ?? null
+        }
+        : null
+    };
+  });
+
+  const cumulative = [...roversById.values()].map((rover) => {
+    const roverRows = rows.filter((evaluation) => evaluation.roverId === rover.id);
+
+    return {
+      rover: {
+        ...rover,
+        faction: factionsById.get(rover.factionId) ?? null,
+        roleInfo: rolesById.get(rover.assignedRole) ?? null
+      },
+      total: roverRows.reduce((sum, evaluation) => sum + evaluation.total, 0),
+      days: DAYS.map((day) => roverRows.find((evaluation) => evaluation.day === day) ?? null)
+    };
+  });
+
+  return { rows, cumulative };
+}
+
+async function getCampMapPayload({ includeHidden = false, includeLeaderOnly = false } = {}) {
+  const collections = getCollections();
+  const [map, locations] = await Promise.all([
+    collections.campMaps.findOne({ id: "last-outpost-blueprint" }),
+    collections.mapLocations.find({}).sort({ name: 1 }).toArray()
+  ]);
+
+  return {
+    map: sanitizeMongoDocument(map),
+    locations: locations
+      .map(sanitizeMongoDocument)
+      .filter((location) => includeHidden || location.isVisible)
+      .filter((location) => includeLeaderOnly || !location.leaderOnly)
+  };
+}
+
+function normalizeMapLocation(body, existing = {}) {
+  const now = new Date().toISOString();
+  const name = String(body?.name ?? existing.name ?? "").trim();
+  const category = MAP_CATEGORIES.includes(body?.category) ? body.category : existing.category || "Activity Zone";
+
+  return {
+    id: existing.id || makeId("map", name),
+    name,
+    description: String(body?.description ?? existing.description ?? "").trim(),
+    category,
+    xPosition: clampPercent(body?.xPosition ?? existing.xPosition),
+    yPosition: clampPercent(body?.yPosition ?? existing.yPosition),
+    accessLevel: String(body?.accessLevel ?? existing.accessLevel ?? "All participants").trim(),
+    safetyNote: String(body?.safetyNote ?? existing.safetyNote ?? "").trim(),
+    isVisible: Boolean(body?.isVisible ?? existing.isVisible ?? true),
+    leaderOnly: Boolean(body?.leaderOnly ?? existing.leaderOnly ?? false),
+    relatedSession: String(body?.relatedSession ?? existing.relatedSession ?? "").trim(),
+    updatedAt: now
+  };
+}
+
 export function createApp() {
   const app = express();
 
   app.use(cors());
-  app.use(express.json());
+  app.use(express.json({ limit: "12mb" }));
 
   app.get("/api/settings/public", async (_req, res, next) => {
     try {
@@ -366,6 +474,57 @@ export function createApp() {
     }
   });
 
+  app.get("/api/individual-evaluations", async (_req, res, next) => {
+    try {
+      res.json(await getIndividualEvaluationSummary());
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/individual-evaluations", async (req, res, next) => {
+    try {
+      const day = String(req.body?.day ?? "");
+      const roverId = String(req.body?.roverId ?? "");
+      const scores = Object.fromEntries(INDIVIDUAL_FIELDS.map((field) => [field, Number(req.body?.[field])]));
+
+      if (!DAYS.includes(day)) {
+        return res.status(400).json({ message: "Invalid day." });
+      }
+
+      const rover = await getCollections().users.findOne({ id: roverId, role: "rover" });
+      if (!rover) {
+        return res.status(400).json({ message: "Invalid Rover." });
+      }
+
+      if (!Object.values(scores).every(validateScore)) {
+        return res.status(400).json({ message: "Individual scores must be between 0 and 20." });
+      }
+
+      const evaluation = {
+        id: `${day.toLowerCase().replace(/\s+/g, "-")}-${roverId}`,
+        day,
+        roverId,
+        ...scores,
+        notes: String(req.body?.notes ?? "").trim(),
+        growthMission: String(req.body?.growthMission ?? "").trim(),
+        updatedAt: new Date().toISOString()
+      };
+
+      evaluation.total = getIndividualTotal(evaluation);
+
+      await getCollections().individualEvaluations.updateOne(
+        { day, roverId },
+        { $set: evaluation },
+        { upsert: true }
+      );
+
+      res.json({ evaluation });
+    } catch (error) {
+      next(error);
+    }
+  });
+
   app.get("/api/missions", async (_req, res, next) => {
     try {
       const missions = await getCollections().missions.find({}).sort({ sequence: 1 }).toArray();
@@ -385,6 +544,96 @@ export function createApp() {
       return res.json({ ...mission, answer: undefined });
     } catch (error) {
       return next(error);
+    }
+  });
+
+  app.get("/api/camp-map", async (req, res, next) => {
+    try {
+      const leaderMode = req.query.mode === "leader";
+      res.json(await getCampMapPayload({
+        includeHidden: leaderMode,
+        includeLeaderOnly: leaderMode
+      }));
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.put("/api/camp-map", async (req, res, next) => {
+    try {
+      const imageUrl = String(req.body?.imageUrl ?? "").trim();
+      const updatedBy = String(req.body?.updatedBy ?? "Outpost Command").trim();
+
+      await getCollections().campMaps.updateOne(
+        { id: "last-outpost-blueprint" },
+        {
+          $set: {
+            imageUrl,
+            updatedAt: new Date().toISOString(),
+            updatedBy
+          }
+        },
+        { upsert: true }
+      );
+
+      res.json(await getCampMapPayload({ includeHidden: true, includeLeaderOnly: true }));
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/camp-map/locations", async (req, res, next) => {
+    try {
+      const location = normalizeMapLocation(req.body);
+      if (!location.name) {
+        return res.status(400).json({ message: "Marker name is required." });
+      }
+
+      await getCollections().mapLocations.insertOne(location);
+      return res.status(201).json({ location });
+    } catch (error) {
+      return next(error);
+    }
+  });
+
+  app.put("/api/camp-map/locations/:id", async (req, res, next) => {
+    try {
+      const collections = getCollections();
+      const existing = sanitizeMongoDocument(await collections.mapLocations.findOne({ id: req.params.id }));
+      if (!existing) {
+        return res.status(404).json({ message: "Map marker not found." });
+      }
+
+      const location = normalizeMapLocation(req.body, existing);
+      if (!location.name) {
+        return res.status(400).json({ message: "Marker name is required." });
+      }
+
+      await collections.mapLocations.updateOne({ id: req.params.id }, { $set: location });
+      return res.json({ location });
+    } catch (error) {
+      return next(error);
+    }
+  });
+
+  app.delete("/api/camp-map/locations/:id", async (req, res, next) => {
+    try {
+      await getCollections().mapLocations.deleteOne({ id: req.params.id });
+      res.json({ success: true });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post("/api/camp-map/reset", async (_req, res, next) => {
+    try {
+      const collections = getCollections();
+      const { mapLocations } = await import("./lib/file-seed.js").then((module) => module.loadSeedDataFromFiles());
+      await collections.mapLocations.deleteMany({});
+      await collections.mapLocations.insertMany(mapLocations);
+      res.json(await getCampMapPayload({ includeHidden: true, includeLeaderOnly: true }));
+    } catch (error) {
+      next(error);
     }
   });
 

@@ -66,6 +66,15 @@ export const api = {
       body: JSON.stringify(body)
     });
   },
+  getIndividualEvaluations() {
+    return request("/individual-evaluations");
+  },
+  saveIndividualEvaluation(body) {
+    return request("/individual-evaluations", {
+      method: "POST",
+      body: JSON.stringify(body)
+    });
+  },
   getMissions() {
     return request("/missions");
   },
@@ -74,5 +83,37 @@ export const api = {
   },
   getReports() {
     return request("/reports");
+  },
+  getCampMap(mode = "viewer") {
+    const query = mode === "leader" ? "?mode=leader" : "";
+    return request(`/camp-map${query}`);
+  },
+  updateCampMap(body) {
+    return request("/camp-map", {
+      method: "PUT",
+      body: JSON.stringify(body)
+    });
+  },
+  createMapLocation(body) {
+    return request("/camp-map/locations", {
+      method: "POST",
+      body: JSON.stringify(body)
+    });
+  },
+  updateMapLocation(id, body) {
+    return request(`/camp-map/locations/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(body)
+    });
+  },
+  deleteMapLocation(id) {
+    return request(`/camp-map/locations/${id}`, {
+      method: "DELETE"
+    });
+  },
+  resetMapLocations() {
+    return request("/camp-map/reset", {
+      method: "POST"
+    });
   }
 };

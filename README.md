@@ -41,6 +41,8 @@ The client runs at `http://localhost:5173`. The API runs on the port in `.env`.
 - Public users can view the landing page, Survival Laws, A.R.K. Briefing, Human Override Index, sign up, and log in.
 - Rovers can sign up, log in, view their profile, faction, role, rules, briefing, scoreboard, and missions.
 - Leaders can manage Rovers, assign factions, assign roles, enter daily evaluations, add breach alerts, add repair missions, and view reports.
+- Logged-in Rovers can view the Outpost Blueprint, marker details, access restrictions, and safety notes.
+- Leaders can upload/replace the blueprint image, add/edit/delete markers, drag marker positions, hide restricted markers, and reset default marker positions.
 
 ## Seed Data
 
@@ -52,6 +54,7 @@ The seed script creates:
 - Empty Rover list
 - Daily mission files
 - Empty evaluation board
+- Default Outpost Blueprint metadata and marker positions
 
 Run this only when the database is empty:
 

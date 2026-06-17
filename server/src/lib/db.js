@@ -50,6 +50,9 @@ export function getCollections() {
     roles: database.collection("roles"),
     missions: database.collection("missions"),
     evaluations: database.collection("evaluations"),
+    individualEvaluations: database.collection("individualEvaluations"),
+    campMaps: database.collection("campMaps"),
+    mapLocations: database.collection("mapLocations"),
     settings: database.collection("settings")
   };
 }

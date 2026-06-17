@@ -21,6 +21,30 @@ export async function seedDatabaseIfEmpty() {
   await collections.roles.insertMany(seed.roles);
   await collections.missions.insertMany(seed.missions);
 
+  await collections.campMaps.updateOne(
+    { id: seed.campMap.id },
+    { $setOnInsert: seed.campMap },
+    { upsert: true }
+  );
+
+  await collections.campMaps.updateOne(
+    {
+      id: seed.campMap.id,
+      $or: [{ imageUrl: "" }, { imageUrl: { $exists: false } }]
+    },
+    {
+      $set: {
+        imageUrl: seed.campMap.imageUrl,
+        updatedAt: new Date().toISOString(),
+        updatedBy: "seed"
+      }
+    }
+  );
+
+  if (await collections.mapLocations.countDocuments() === 0) {
+    await collections.mapLocations.insertMany(seed.mapLocations);
+  }
+
   for (const user of seed.users) {
     await collections.users.updateOne(
       { id: user.id },

@@ -12,14 +12,16 @@ async function readJson(fileName) {
 }
 
 export async function loadSeedDataFromFiles() {
-  const [users, factions, roles, missions, evaluations, settings] = await Promise.all([
+  const [users, factions, roles, missions, evaluations, settings, campMap, mapLocations] = await Promise.all([
     readJson("users.json"),
     readJson("factions.json"),
     readJson("roles.json"),
     readJson("missions.json"),
     readJson("evaluations.json"),
-    readJson("settings.json")
+    readJson("settings.json"),
+    readJson("campMap.json"),
+    readJson("mapLocations.json")
   ]);
 
-  return { users, factions, roles, missions, evaluations, settings };
+  return { users, factions, roles, missions, evaluations, settings, campMap, mapLocations };
 }

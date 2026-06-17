@@ -17,7 +17,11 @@ import { LeaderLoginPage } from "./pages/LeaderLoginPage";
 import { LeaderDashboardPage } from "./pages/LeaderDashboardPage";
 import { ManageRoversPage } from "./pages/ManageRoversPage";
 import { LeaderEvaluationPage } from "./pages/LeaderEvaluationPage";
+import { LeaderIndividualEvaluationPage } from "./pages/LeaderIndividualEvaluationPage";
+import { EvaluationHistoryPage } from "./pages/EvaluationHistoryPage";
+import { IndividualEvaluationHistoryPage } from "./pages/IndividualEvaluationHistoryPage";
 import { ReportsPage } from "./pages/ReportsPage";
+import { OutpostBlueprintPage } from "./pages/OutpostBlueprintPage";
 
 function LeaderRoute({ children }) {
   return isLeaderSession() ? children : <Navigate to="/leader-login" replace />;
@@ -53,12 +57,38 @@ export default function App() {
           <Route path="/rover-login" element={<RoverLoginPage />} />
           <Route path="/leader-login" element={<LeaderLoginPage />} />
           <Route path="/scoreboard" element={<ScoreboardPage />} />
+          <Route
+            path="/evaluation-history"
+            element={(
+              isLeaderSession() || isRoverSession()
+                ? <EvaluationHistoryPage />
+                : <Navigate to="/rover-login" replace />
+            )}
+          />
+          <Route
+            path="/individual-evaluation-history"
+            element={(
+              isLeaderSession() || isRoverSession()
+                ? <IndividualEvaluationHistoryPage />
+                : <Navigate to="/rover-login" replace />
+            )}
+          />
           <Route path="/missions" element={<MissionsPage />} />
           <Route path="/missions/:missionId" element={<MissionDetailPage />} />
+          <Route
+            path="/outpost-blueprint"
+            element={(
+              isLeaderSession() || isRoverSession()
+                ? <OutpostBlueprintPage />
+                : <Navigate to="/rover-login" replace />
+            )}
+          />
           <Route path="/rover" element={<RoverRoute><RoverDashboardPage /></RoverRoute>} />
           <Route path="/leader" element={<LeaderRoute><LeaderDashboardPage /></LeaderRoute>} />
           <Route path="/leader/rovers" element={<LeaderRoute><ManageRoversPage /></LeaderRoute>} />
+          <Route path="/leader/blueprint" element={<LeaderRoute><OutpostBlueprintPage mode="leader" /></LeaderRoute>} />
           <Route path="/leader/evaluations" element={<LeaderRoute><LeaderEvaluationPage /></LeaderRoute>} />
+          <Route path="/leader/individual-evaluations" element={<LeaderRoute><LeaderIndividualEvaluationPage /></LeaderRoute>} />
           <Route path="/leader/reports" element={<LeaderRoute><ReportsPage /></LeaderRoute>} />
         </Routes>
       ) : null}
